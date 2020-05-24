@@ -45,7 +45,7 @@ RUN echo [root] Using container base: $BASE_CONTAINER && \
         --gid $SINOPIA_GID \
         --key PASS_MAX_DAYS=99999 \
         --key PASS_MIN_DAYS=0 \
-        --key PASS_MAX_DAYS=7 \
+        --key PASS_WARN_AGE=7 \
         sinopia
 
 ARG SINOPIA_UID
@@ -53,11 +53,11 @@ ARG SINOPIA_GID
 USER ${SINOPIA_UID}:${SINOPIA_GID}
 
 RUN echo [sinopia] Making /app/registry directory. && \
-    mkdir /app/registry && \
+    mkdir --parents /app/registry && \
     echo [sinopia] Making /app/config directory. && \
-    mkdir /app/config && \
+    mkdir --parents /app/config && \
     echo [sinopia] Making /app/secrets directory. && \
-    mkdir /app/secrets && \
+    mkdir --parents /app/secrets && \
     echo [sinopia] Installing Sinopia from NPM. && \
     npm install sinopia && \
     echo [sinopia] Adding Sinopia config.yaml to /app/config/config.yaml.
