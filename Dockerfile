@@ -62,11 +62,12 @@ RUN echo [root] Using container base: $BASE_CONTAINER && \
 
 ARG SINOPIA_UID
 ARG SINOPIA_GID
-ADD --chown=${SINOPIA_UID}:${SINOPIA_GID} config.yaml /app/config/config.yaml
+ADD config.yaml /app/config/config.yaml
 
 ARG BASE_CONTAINER
 ARG BASE_CONTAINER_VERSION
-RUN echo [sinopia] Contents of /app/config/config.yaml: && \
+RUN chown sinopia:sinopa /app/config/config.yaml; \
+    echo [sinopia] Contents of /app/config/config.yaml: && \
     cat /app/config/config.yaml; \
     echo [sinopia] Using container base: && \
     echo $BASE_CONTAINER; \
