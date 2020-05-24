@@ -21,6 +21,13 @@ LABEL maintainer="David A. Ball <david@daball.me>"
 
 VOLUME [ "/app/registry", "/app/config", "/app/secrets" ]
 
+ENV BASE_CONTAINER=${BASE_CONTAINER}
+ENV BASE_CONTAINER_VERSION=${BASE_CONTAINER_VERSION}
+ENV SINOPIA_UID=${SINOPIA_UID}
+ENV SINOPIA_GID=${SINOPIA_GID}
+ENV SINOPIA_PORT=${SINOPIA_PORT}
+ENV SINOPIA_VERSION=${SINOPIA_VERSION}
+
 RUN echo "[root] Using container base: ${BASE_CONTAINER}" && \
     echo "[root] Using container version: ${BASE_CONTAINER_VERSION}" && \
     echo "[root] Updating apt package cache." && \
