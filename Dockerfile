@@ -2,7 +2,7 @@
 # The expectation is that node is installed and available on the container already.
 ARG BASE_CONTAINER=node
 # BASE_CONTAINER_VERSION refers to the version of the base Docker container for the image, default is 14-stretch
-ARG NODE_VERSION=14-stretch
+ARG BASE_CONTAINER_VERSION=14-stretch
 # SINOPIA_UID refers to the UID for the Sinopia registry volume
 # An example UID might be 101 for a particular Debian user
 # An example UID might be 501 for a particular Mac user
@@ -19,11 +19,7 @@ ARG SINOPIA_VERSION=1.4.0
 FROM ${BASE_CONTAINER}:${BASE_CONTAINER_VERSION}
 LABEL maintainer="David A. Ball <david@daball.me>"
 
-VOLUME [ \
-    "/app/registry", \
-    "/app/config", \
-    "/app/secrets" \
-]
+VOLUME [ "/app/registry", "/app/config", "/app/secrets" ]
 
 RUN echo "[root] Using container base: ${BASE_CONTAINER}" && \
     echo "[root] Using container version: ${BASE_CONTAINER_VERSION}" && \
