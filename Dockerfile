@@ -15,12 +15,15 @@ ARG SINOPIA_GID=102
 ARG SINOPIA_PORT=4873
 # SINOPIA_VERSION refers to the version of Sinopia that will be installed
 ARG SINOPIA_VERSION=1.4.0
-
 FROM ${BASE_CONTAINER}:${BASE_CONTAINER_VERSION}
 LABEL maintainer="David A. Ball <david@daball.me>"
 
 VOLUME [ "/app/registry", "/app/config", "/app/secrets" ]
 
+ARG BASE_CONTAINER
+ARG BASE_CONTAINER_VERSION
+ARG SINOPIA_UID
+ARG SINOPIA_GID
 RUN echo [root] Using container base: $BASE_CONTAINER && \
     echo [root] Using container version: $BASE_CONTAINER_VERSION && \
     echo [root] Updating apt package cache. && \
@@ -38,6 +41,8 @@ RUN echo [root] Using container base: $BASE_CONTAINER && \
         --disabled-password \
         sinopia
 
+ARG SINOPIA_UID
+ARG SINOPIA_GID
 USER ${SINOPIA_UID}:${SINOPIA_GID}
 
 RUN echo [sinopia] Making /app/registry directory. && \
@@ -52,6 +57,8 @@ RUN echo [sinopia] Making /app/registry directory. && \
 
 ADD config.yaml /app/config/config.yaml
 
+ARG BASE_CONTAINER
+ARG BASE_CONTAINER_VERSION
 RUN echo [sinopia] Contents of /app/config/config.yaml: && \
     cat /app/config/config.yaml; \
     echo [sinopia] Using container base: && \
@@ -66,6 +73,8 @@ RUN echo [sinopia] Contents of /app/config/config.yaml: && \
     sinopia --version; \
     echo [sinopia] Launching sinopia...
 
+ARG SINOPIA_PORT
 CMD sinopia -l $SINOPIA_PORT -c /app/config/config.yaml
 
+ARG SINOPIA_PORT
 EXPOSE ${SINOPIA_PORT}/tcp
