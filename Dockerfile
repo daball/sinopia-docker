@@ -49,13 +49,16 @@ RUN echo [root] Using container base: $BASE_CONTAINER && \
         sinopia && \
     echo [sinopia] Making /app directory. && \
     mkdir --parents /app && \
+    chown -R sinopia:sinopia /app && \
     echo [sinopia] Making /app/registry directory. && \
     mkdir --parents /app/registry && \
+    chown -R sinopia:sinopia /app/registry && \
     echo [sinopia] Making /app/config directory. && \
     mkdir --parents /app/config && \
+    chown -R sinopia:sinopia /app/config && \
     echo [sinopia] Making /app/secrets directory. && \
     mkdir --parents /app/secrets && \
-    chown -R sinopia:sinopia /app && \
+    chown -R sinopia:sinopia /app/secrets && \
     echo [sinopia] Installing Sinopia from NPM. && \
     su -l -c "npm install sinopia" sinopia && \
     echo [sinopia] Adding Sinopia config.yaml to /app/config/config.yaml.
@@ -78,8 +81,7 @@ RUN chown sinopia:sinopia /app/config/config.yaml; \
     echo [sinopia] Using node version: && \
     node --version; \
     echo [sinopia] Using sinopia version: && \
-    su -l -c "./node_modules/sinopia/bin/sinopia --version" sinopia; \
-    echo [sinopia] Launching sinopia...
+    su -l -c "./node_modules/sinopia/bin/sinopia --version" sinopia
 
 ARG SINOPIA_PORT
 CMD su -l -c "./node_modules/sinopia/bin/sinopia -l $SINOPIA_PORT -c /app/config/config.yaml" sinopia
