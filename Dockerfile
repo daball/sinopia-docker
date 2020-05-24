@@ -36,7 +36,7 @@ RUN echo [root] Using container base: $BASE_CONTAINER && \
         --home /app \
         --shell /bin/bash \
         --uid $SINOPIA_UID \
-        --group --gid $SINOPIA_GID \
+        --gid $SINOPIA_GID \
         --disabled-login \
         --disabled-password \
         sinopia
