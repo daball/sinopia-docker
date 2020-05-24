@@ -66,7 +66,7 @@ ADD config.yaml /app/config/config.yaml
 
 ARG BASE_CONTAINER
 ARG BASE_CONTAINER_VERSION
-RUN chown sinopia:sinopa /app/config/config.yaml; \
+RUN chown sinopia:sinopia /app/config/config.yaml; \
     echo [sinopia] Contents of /app/config/config.yaml: && \
     cat /app/config/config.yaml; \
     echo [sinopia] Using container base: && \
@@ -78,11 +78,11 @@ RUN chown sinopia:sinopa /app/config/config.yaml; \
     echo [sinopia] Using node version: && \
     node --version; \
     echo [sinopia] Using sinopia version: && \
-    su -l -c "sinopia --version" sinopia; \
+    su -l -c "./node_modules/sinopia/bin/sinopia --version" sinopia; \
     echo [sinopia] Launching sinopia...
 
 ARG SINOPIA_PORT
-CMD su -l -c "sinopia -l $SINOPIA_PORT -c /app/config/config.yaml" sinopia
+CMD su -l -c "./node_modules/sinopia/bin/sinopia -l $SINOPIA_PORT -c /app/config/config.yaml" sinopia
 
 ARG SINOPIA_PORT
 EXPOSE ${SINOPIA_PORT}/tcp
