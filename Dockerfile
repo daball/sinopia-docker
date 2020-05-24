@@ -21,26 +21,19 @@ LABEL maintainer="David A. Ball <david@daball.me>"
 
 VOLUME [ "/app/registry", "/app/config", "/app/secrets" ]
 
-ENV BASE_CONTAINER=${BASE_CONTAINER}
-ENV BASE_CONTAINER_VERSION=${BASE_CONTAINER_VERSION}
-ENV SINOPIA_UID=${SINOPIA_UID}
-ENV SINOPIA_GID=${SINOPIA_GID}
-ENV SINOPIA_PORT=${SINOPIA_PORT}
-ENV SINOPIA_VERSION=${SINOPIA_VERSION}
-
-RUN echo "[root] Using container base: ${BASE_CONTAINER}" && \
-    echo "[root] Using container version: ${BASE_CONTAINER_VERSION}" && \
+RUN echo "[root] Using container base: $BASE_CONTAINER" && \
+    echo "[root] Using container version: $BASE_CONTAINER_VERSION" && \
     echo "[root] Updating apt package cache." && \
     apt update && \
     echo "[root] Upgrading packages from apt remote repositories." && \
     apt upgrade && \
-    echo "[root] Creating unprivileged sinopia user with UID ${SINOPIA_UID} and GID ${SINOPIA_GID}." && \
+    echo "[root] Creating unprivileged sinopia user with UID $SINOPIA_UID and GID $SINOPIA_GID." && \
     adduser \
         --system \
         --home /app \
         --shell /bin/bash \
-        --uid ${SINOPIA_UID} \
-        --gid ${SINOPIA_GID} \
+        --uid $SINOPIA_UID \
+        --gid $SINOPIA_GID \
         --disabled-login \
         --disabled-password \
         sinopia
@@ -62,9 +55,9 @@ ADD config.yaml /app/config/config.yaml
 RUN echo "[sinopia] Contents of /app/config/config.yaml:" && \
     cat /app/config/config.yaml; \
     echo "[sinopia] Using container base:" && \
-    echo "${BASE_CONTAINER}"; \
+    echo "$BASE_CONTAINER"; \
     echo "[sinopia] Using container version:" && \
-    echo "${BASE_CONTAINER_VERSION}"; \
+    echo "$BASE_CONTAINER_VERSION"; \
     echo "[sinopia] Using kernel version:" && \
     uname -an; \
     echo "[sinopia] Using node version:" && \
@@ -73,6 +66,6 @@ RUN echo "[sinopia] Contents of /app/config/config.yaml:" && \
     sinopia --version; \
     echo "[sinopia] Launching sinopia...";
 
-CMD sinopia -l ${SINOPIA_PORT} -c /app/config/config.yaml
+CMD sinopia -l $SINOPIA_PORT -c /app/config/config.yaml
 
 EXPOSE ${SINOPIA_PORT}/tcp
