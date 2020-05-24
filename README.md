@@ -16,3 +16,4 @@ You can use all the defaults by typing:
     git clone https://github.com/daball/sinopia-docker
     cd sinopia-docker
     docker build -t sinopia:dev .
+    docker run --name sinopia sinopia:dev
