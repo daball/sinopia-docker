@@ -48,9 +48,6 @@ RUN echo [root] Using container base: $BASE_CONTAINER && \
         --key PASS_WARN_AGE=7 \
         sinopia
 
-ARG SINOPIA_UID
-ARG SINOPIA_GID
-USER ${SINOPIA_UID}:${SINOPIA_GID}
 RUN echo [sinopia] Making /app/registry directory. && \
     mkdir --parents /app/registry && \
     echo [sinopia] Making /app/config directory. && \
@@ -58,18 +55,15 @@ RUN echo [sinopia] Making /app/registry directory. && \
     echo [sinopia] Making /app/secrets directory. && \
     mkdir --parents /app/secrets && \
     echo [sinopia] Installing Sinopia from NPM. && \
-    npm install sinopia && \
+    su -l -c "npm install sinopia" sinopia && \
     echo [sinopia] Adding Sinopia config.yaml to /app/config/config.yaml.
 
 ARG SINOPIA_UID
 ARG SINOPIA_GID
 ADD --chown=${SINOPIA_UID}:${SINOPIA_GID} config.yaml /app/config/config.yaml
 
-ARG SINOPIA_UID
-ARG SINOPIA_GID
 ARG BASE_CONTAINER
 ARG BASE_CONTAINER_VERSION
-USER ${SINOPIA_UID}:${SINOPIA_GID}
 RUN echo [sinopia] Contents of /app/config/config.yaml: && \
     cat /app/config/config.yaml; \
     echo [sinopia] Using container base: && \
@@ -81,11 +75,11 @@ RUN echo [sinopia] Contents of /app/config/config.yaml: && \
     echo [sinopia] Using node version: && \
     node --version; \
     echo [sinopia] Using sinopia version: && \
-    sinopia --version; \
+    su -l -c "sinopia --version" sinopia; \
     echo [sinopia] Launching sinopia...
 
 ARG SINOPIA_PORT
-CMD sinopia -l $SINOPIA_PORT -c /app/config/config.yaml
+CMD su -l -c "sinopia -l $SINOPIA_PORT -c /app/config/config.yaml" sinopia
 
 ARG SINOPIA_PORT
 EXPOSE ${SINOPIA_PORT}/tcp
