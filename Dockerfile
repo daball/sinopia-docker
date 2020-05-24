@@ -30,15 +30,22 @@ RUN echo [root] Using container base: $BASE_CONTAINER && \
     apt update && \
     echo [root] Upgrading packages from apt remote repositories. && \
     apt upgrade && \
+    echo [root] Creating unprivileged sinopia group with GID $SINOPIA_GID. && \
+    groupadd --system --non-unique --gid $SINOPIA_GID sinopia && \
     echo [root] Creating unprivileged sinopia user with UID $SINOPIA_UID and GID $SINOPIA_GID. && \
-    adduser \
+    useradd \
         --system \
-        --home /app \
+        --comment "Service account for Sinopia." \
+        --non-unique \
+        --create-home \
+        --home-dir /app \
         --shell /bin/bash \
         --uid $SINOPIA_UID \
+        --no-user-group \
         --gid $SINOPIA_GID \
-        --disabled-login \
-        --disabled-password \
+        --key PASS_MAX_DAYS=99999 \
+        --key PASS_MIN_DAYS=0 \
+        --key PASS_MAX_DAYS=7 \
         sinopia
 
 ARG SINOPIA_UID
