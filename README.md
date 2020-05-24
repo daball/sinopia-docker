@@ -13,5 +13,6 @@ A private/caching npm repository server configuration for Docker.
 
 You can use all the defaults by typing:
 
-    `git clone https://github.com/daball/sinopia-docker`
-    `
+    git clone https://github.com/daball/sinopia-docker
+    cd sinopia-docker
+    docker build -t sinopia:dev .
