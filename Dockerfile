@@ -21,50 +21,50 @@ LABEL maintainer="David A. Ball <david@daball.me>"
 
 VOLUME [ "/app/registry", "/app/config", "/app/secrets" ]
 
-RUN echo "[root] Using container base: $BASE_CONTAINER" && \
-    echo "[root] Using container version: $BASE_CONTAINER_VERSION" && \
-    echo "[root] Updating apt package cache." && \
+RUN echo [root] Using container base: $BASE_CONTAINER && \
+    echo [root] Using container version: $BASE_CONTAINER_VERSION && \
+    echo [root] Updating apt package cache. && \
     apt update && \
-    echo "[root] Upgrading packages from apt remote repositories." && \
+    echo [root] Upgrading packages from apt remote repositories. && \
     apt upgrade && \
-    echo "[root] Creating unprivileged sinopia user with UID $SINOPIA_UID and GID $SINOPIA_GID." && \
+    echo [root] Creating unprivileged sinopia user with UID $SINOPIA_UID and GID $SINOPIA_GID. && \
     adduser \
         --system \
         --home /app \
         --shell /bin/bash \
         --uid $SINOPIA_UID \
-        --gid $SINOPIA_GID \
+        --group --gid $SINOPIA_GID \
         --disabled-login \
         --disabled-password \
         sinopia
 
 USER ${SINOPIA_UID}:${SINOPIA_GID}
 
-RUN echo "[sinopia] Making /app/registry directory." && \
+RUN echo [sinopia] Making /app/registry directory. && \
     mkdir /app/registry && \
-    echo "[sinopia] Making /app/config directory." && \
+    echo [sinopia] Making /app/config directory. && \
     mkdir /app/config && \
-    echo "[sinopia] Making /app/secrets directory." && \
+    echo [sinopia] Making /app/secrets directory. && \
     mkdir /app/secrets && \
-    echo "[sinopia] Installing Sinopia from NPM." && \
+    echo [sinopia] Installing Sinopia from NPM. && \
     npm install sinopia && \
-    echo "[sinopia] Adding Sinopia config.yaml to /app/config/config.yaml."
+    echo [sinopia] Adding Sinopia config.yaml to /app/config/config.yaml.
 
 ADD config.yaml /app/config/config.yaml
 
-RUN echo "[sinopia] Contents of /app/config/config.yaml:" && \
+RUN echo [sinopia] Contents of /app/config/config.yaml: && \
     cat /app/config/config.yaml; \
-    echo "[sinopia] Using container base:" && \
-    echo "$BASE_CONTAINER"; \
-    echo "[sinopia] Using container version:" && \
-    echo "$BASE_CONTAINER_VERSION"; \
-    echo "[sinopia] Using kernel version:" && \
+    echo [sinopia] Using container base: && \
+    echo $BASE_CONTAINER; \
+    echo [sinopia] Using container version: && \
+    echo $BASE_CONTAINER_VERSION; \
+    echo [sinopia] Using kernel version: && \
     uname -an; \
-    echo "[sinopia] Using node version:" && \
+    echo [sinopia] Using node version: && \
     node --version; \
-    echo "[sinopia] Using sinopia version:" && \
+    echo [sinopia] Using sinopia version: && \
     sinopia --version; \
-    echo "[sinopia] Launching sinopia...";
+    echo [sinopia] Launching sinopia...
 
 CMD sinopia -l $SINOPIA_PORT -c /app/config/config.yaml
 
