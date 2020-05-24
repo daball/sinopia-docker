@@ -30,14 +30,14 @@ RUN echo [root] Using container base: $BASE_CONTAINER && \
     apt update && \
     echo [root] Upgrading packages from apt remote repositories. && \
     apt upgrade && \
-    echo [root] Creating unprivileged sinopia group with GID $SINOPIA_GID. && \
+    echo [root] Adding unprivileged sinopia group with GID $SINOPIA_GID. && \
     groupadd --system --non-unique --gid $SINOPIA_GID sinopia && \
-    echo [root] Creating unprivileged sinopia user with UID $SINOPIA_UID and GID $SINOPIA_GID. && \
+    echo [root] Adding unprivileged sinopia user with UID $SINOPIA_UID and GID $SINOPIA_GID. && \
     useradd \
         --system \
         --comment "Service account for Sinopia." \
         --non-unique \
-        --create-home \
+        --no-create-home \
         --home-dir /app \
         --shell /bin/bash \
         --uid $SINOPIA_UID \
@@ -46,14 +46,16 @@ RUN echo [root] Using container base: $BASE_CONTAINER && \
         --key PASS_MAX_DAYS=99999 \
         --key PASS_MIN_DAYS=0 \
         --key PASS_WARN_AGE=7 \
-        sinopia
-
-RUN echo [sinopia] Making /app/registry directory. && \
+        sinopia && \
+    echo [sinopia] Making /app directory. && \
+    mkdir --parents /app && \
+    echo [sinopia] Making /app/registry directory. && \
     mkdir --parents /app/registry && \
     echo [sinopia] Making /app/config directory. && \
     mkdir --parents /app/config && \
     echo [sinopia] Making /app/secrets directory. && \
     mkdir --parents /app/secrets && \
+    chown -R sinopia:sinopia /app && \
     echo [sinopia] Installing Sinopia from NPM. && \
     su -l -c "npm install sinopia" sinopia && \
     echo [sinopia] Adding Sinopia config.yaml to /app/config/config.yaml.
