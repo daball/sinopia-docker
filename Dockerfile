@@ -51,7 +51,6 @@ RUN echo [root] Using container base: $BASE_CONTAINER && \
 ARG SINOPIA_UID
 ARG SINOPIA_GID
 USER ${SINOPIA_UID}:${SINOPIA_GID}
-
 RUN echo [sinopia] Making /app/registry directory. && \
     mkdir --parents /app/registry && \
     echo [sinopia] Making /app/config directory. && \
@@ -62,10 +61,15 @@ RUN echo [sinopia] Making /app/registry directory. && \
     npm install sinopia && \
     echo [sinopia] Adding Sinopia config.yaml to /app/config/config.yaml.
 
-ADD config.yaml /app/config/config.yaml
+ARG SINOPIA_UID
+ARG SINOPIA_GID
+ADD --chown=${SINOPIA_UID}:${SINOPIA_GID} config.yaml /app/config/config.yaml
 
+ARG SINOPIA_UID
+ARG SINOPIA_GID
 ARG BASE_CONTAINER
 ARG BASE_CONTAINER_VERSION
+USER ${SINOPIA_UID}:${SINOPIA_GID}
 RUN echo [sinopia] Contents of /app/config/config.yaml: && \
     cat /app/config/config.yaml; \
     echo [sinopia] Using container base: && \
